@@ -14,7 +14,9 @@ const char* const menu[MENULENGTH] PROGMEM = {
 };
 extern const byte player[];
 extern const byte platform[];
+extern const byte platform2[];
 extern const byte meteor[];
+extern const byte arrow[];
 extern const byte font3x5[];
 extern const byte font5x7[];
 void setup(){
@@ -26,7 +28,7 @@ void setup(){
 }
 
 int playerx = 20;
-int playery = 20;
+int playery = 36;
 int playerflip = NOFLIP;
 int playerxv = 2;
 int playeryv = 1;
@@ -36,9 +38,13 @@ int frames = 0;
 int meteorx = random(0,76);
 int meteory = 0;
 
+int arrowx = 0;
+int arrowy = random(20,40);
+
 boolean alive = true;
 
 void loop(){
+  gb.battery.show = false;
   switch(gb.menu(menu, MENULENGTH)){
     case -1: //nothing selected
       gb.titleScreen(F("Smash & Crash"));
@@ -54,12 +60,38 @@ void loop(){
         playergrav = 1;
         meteory = 0;
         meteorx = random(0,76);
+        arrowx = 0;
+        arrowy = random(20,40);
         alive = true;
         play();
       break;
     case 1: //Load Survival
-      gb.display.print(F("    Loading...."));
-        delay(100);
+      while (1) {
+        if (gb.update()) {
+          if (gb.buttons.pressed(BTN_C)) {
+            gb.sound.playCancel();
+            gb.battery.show = false;
+            break;
+          }
+          gb.display.cursorX = 0;
+          gb.display.cursorY = 0;
+  
+          gb.display.print(F("Battery:"));
+          gb.display.print(gb.battery.level);
+          gb.display.println(F("/4"));
+          gb.display.println(F(""));
+
+          gb.display.print(F("Light:"));
+          gb.display.println(gb.backlight.ambientLight);
+          gb.display.println(F(""));
+
+          gb.display.print(F("Backlight:"));
+          gb.display.println(gb.backlight.backlightValue);
+          gb.display.println(F(""));
+          
+          gb.battery.show = true;
+      }
+    }
       break;
     case 2: //Load Multiplayer
       gb.display.print(F(" Connecting..."));
