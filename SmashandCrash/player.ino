@@ -3,16 +3,23 @@ void play(){
     if(gb.update()){
       if(alive == true){
         frames = frames + 1;
+        
         gb.display.drawBitmap(meteorx,meteory,meteor);
-        meteory = meteory + 1;
+        meteory = meteory + 2;
+        
+        gb.display.drawBitmap(arrowx,arrowy,arrow);
+        arrowx = arrowx + 1;
+        
         playery = playery + playergrav;
         gb.display.drawBitmap(playerx,playery,player,NOROT,playerflip);
         gb.display.drawBitmap(0,44,platform);
-        if (gb.buttons.repeat(BTN_UP,2)){
-          playery = playery - playeryv;
+        gb.display.drawBitmap(20,28,platform2);
+        
+        if (gb.buttons.held(BTN_DOWN,2)){
+          playery = playery + 4;
         };
-        if (gb.buttons.repeat(BTN_DOWN,2)){
-          playery = playery + playeryv;
+        if (gb.buttons.released(BTN_DOWN)){
+          playery = playery - 4;
         };
         if (gb.buttons.repeat(BTN_LEFT,2)){
           playerx = playerx - playerxv;
@@ -28,18 +35,38 @@ void play(){
           playery = playery - 20;
           };
         };
-        if(gb.collideBitmapBitmap(playerx, playery, player, 0, 44, platform) == true){
+        
+        //Platform code
+        
+        if((gb.collideBitmapBitmap(playerx, playery, player, 0, 44, platform) == true) || (gb.collideBitmapBitmap(playerx, playery, player, 20, 28, platform2) == true)){
           playergrav = 0;
         };
-        if(gb.collideBitmapBitmap(playerx, playery, player, 0, 44, platform) == false){
+        if((gb.collideBitmapBitmap(playerx, playery, player, 0, 44, platform) == false) && (gb.collideBitmapBitmap(playerx, playery, player, 20, 28, platform2) == false)){
           playergrav = 1;
         };
+        
+        //Meteor Code
+        
         if(gb.collideBitmapBitmap(playerx, playery, player, meteorx, meteory, meteor) == true){
           alive = false;
         };
-        if(gb.collideBitmapBitmap(meteorx, meteory, meteor, 0, 44, platform) == true){
+        if((gb.collideBitmapBitmap(meteorx, meteory, meteor, 0, 44, platform) == true) || (gb.collideBitmapBitmap(meteorx, meteory, meteor, 20, 28, platform2) == true)){
           meteory = 0;
           meteorx = random(0,76);
+        };
+        
+        //Arrow Code
+        
+        if(gb.collideBitmapBitmap(playerx, playery, player, arrowx, arrowy, arrow) == true){
+          alive = false;
+        };
+        if((gb.collideBitmapBitmap(arrowx, arrowy, arrow, 0, 44, platform) == true) || (gb.collideBitmapBitmap(arrowx, arrowy, arrow, 20, 28, platform2) == true)){
+          arrowx = 0;
+          arrowy = random(20,40);
+        };
+        if(arrowx >= 80){
+          arrowx = 0;
+          arrowy = random(20,40);
         };
       };
       if(alive == false){
