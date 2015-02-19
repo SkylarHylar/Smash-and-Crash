@@ -5,7 +5,7 @@ void play(){
         frames = frames + 1;
         
         gb.display.drawBitmap(meteorx,meteory,meteor);
-        meteory = meteory + 2;
+        meteory = meteory + 1;
         
         gb.display.drawBitmap(arrowx,arrowy,arrow);
         arrowx = arrowx + 1;
@@ -78,7 +78,9 @@ void play(){
         gb.display.println("You lived for:");
         gb.display.print(frames);
         gb.display.println(" frames.");
-        if (gb.buttons.pressed(BTN_C)){
+        gb.display.println("");
+        gb.display.println("Press \26");
+        if (gb.buttons.pressed(BTN_B)){
           gb.sound.playCancel();
           frames = 0;
           gb.display.setFont(font5x7);
