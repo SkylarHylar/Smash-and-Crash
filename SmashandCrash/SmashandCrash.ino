@@ -5,13 +5,14 @@ Gamebuino gb;
 const char strSurvival[] PROGMEM = "Survival";
 const char strOptions[] PROGMEM = "Options";
 const char strMulti[] PROGMEM = "Multiplayer";
-const char strTitle[] PROGMEM = "Back to Title";
+const char strTitle[] PROGMEM = "Change Game";
 const char* const menu[MENULENGTH] PROGMEM = {
   strSurvival,
   strOptions,
   strMulti,
   strTitle,
 };
+extern const byte logo[];
 extern const byte player[];
 extern const byte platform[];
 extern const byte platform2[];
@@ -22,9 +23,9 @@ extern const byte font5x7[];
 void setup(){
   gb.begin();
   gb.display.setFont(font5x7);
-  gb.titleScreen(F("Smash & Crash"));
+  gb.titleScreen(logo);
   gb.battery.show = false;
-  gb.display.persistence = true;
+  gb.display.persistence = false;
 }
 
 int playerx = 20;
@@ -47,9 +48,9 @@ void loop(){
   gb.battery.show = false;
   switch(gb.menu(menu, MENULENGTH)){
     case -1: //nothing selected
-      gb.titleScreen(F("Smash & Crash"));
+      gb.titleScreen(logo);
       break;
-    case 0: //Load story
+    case 0: //Load Survival
       gb.display.print(F("    Loading...."));
         gb.pickRandomSeed();
         playerx = 20;
@@ -65,10 +66,10 @@ void loop(){
         alive = true;
         play();
       break;
-    case 1: //Load Survival
+    case 1: //Load Options
       while (1) {
         if (gb.update()) {
-          if (gb.buttons.pressed(BTN_C)) {
+          if (gb.buttons.pressed(BTN_B)) {
             gb.sound.playCancel();
             gb.battery.show = false;
             break;
@@ -98,7 +99,7 @@ void loop(){
         delay(100);
       break;
     case 3: //Back to the Title Screen
-      gb.titleScreen(F("Smash & Crash"));
+      gb.changeGame();
       break;
     default:
       break;
