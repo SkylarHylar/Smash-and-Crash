@@ -15,17 +15,17 @@ void play(){
         gb.display.drawBitmap(0,44,platform);
         gb.display.drawBitmap(20,28,platform2);
         
-        if (gb.buttons.held(BTN_DOWN,2)){
+        if ((gb.buttons.held(BTN_DOWN,2)) && (playergrav == 0)){
           playery = playery + 4;
         };
-        if (gb.buttons.released(BTN_DOWN)){
+        if ((gb.buttons.released(BTN_DOWN)) && (playergrav == 0)){
           playery = playery - 4;
         };
-        if (gb.buttons.repeat(BTN_LEFT,2)){
+        if ((gb.buttons.repeat(BTN_LEFT,2)) && (playerx > 0)){
           playerx = playerx - playerxv;
           playerflip = FLIPH;
         };
-        if (gb.buttons.repeat(BTN_RIGHT,2)){
+        if ((gb.buttons.repeat(BTN_RIGHT,2)) && (playerx < 76)){
           playerx = playerx + playerxv;
           playerflip = NOFLIP;
         };
@@ -75,7 +75,7 @@ void play(){
         gb.display.cursorY = 0;
         gb.display.println("You died!");
         gb.display.println("");
-        gb.display.println("You lived for:");
+        gb.display.println("Time:");
         gb.display.print(frames);
         gb.display.println(" frames.");
         gb.display.println("");
