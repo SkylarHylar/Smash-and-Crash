@@ -23,7 +23,7 @@ extern const byte font5x7[];
 void setup(){
   gb.begin();
   gb.display.setFont(font5x7);
-  gb.titleScreen(logo);
+  titlescreen();
   gb.battery.show = false;
   gb.display.persistence = false;
 }
@@ -48,7 +48,7 @@ void loop(){
   gb.battery.show = false;
   switch(gb.menu(menu, MENULENGTH)){
     case -1: //nothing selected
-      gb.titleScreen(logo);
+      titlescreen();
       break;
     case 0: //Load Survival
       gb.display.print(F("    Loading...."));
@@ -98,10 +98,27 @@ void loop(){
       gb.display.print(F(" Connecting..."));
         delay(100);
       break;
-    case 3: //Back to the Title Screen
+    case 3: //Back to the Loader
       gb.changeGame();
       break;
     default:
       break;
+  }
+}
+
+void titlescreen(){
+  while(1){
+    if (gb.update()){
+      gb.display.drawBitmap(0, 0, logo);
+      if (gb.buttons.pressed(BTN_A)) {
+        gb.sound.playOK();
+        gb.battery.show = false;
+        break;
+        break;
+      }
+      if (gb.buttons.pressed(BTN_C)) {
+        gb.changeGame();
+      }
+    }
   }
 }
