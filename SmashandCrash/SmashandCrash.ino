@@ -81,15 +81,7 @@ void loop(){
           gb.display.print(gb.battery.level);
           gb.display.println(F("/4"));
           gb.display.println(F(""));
-
-          gb.display.print(F("Light:"));
-          gb.display.println(gb.backlight.ambientLight);
-          gb.display.println(F(""));
-
-          gb.display.print(F("Backlight:"));
-          gb.display.println(gb.backlight.backlightValue);
-          gb.display.println(F(""));
-          
+          gb.display.println(F("Press \26 to return"));
           gb.battery.show = true;
       }
     }
@@ -110,13 +102,21 @@ void titlescreen(){
   while(1){
     if (gb.update()){
       gb.display.drawBitmap(0, 0, logo);
-      if (gb.buttons.pressed(BTN_A)) {
+      if (gb.buttons.pressed(BTN_A)){
         gb.sound.playOK();
         gb.battery.show = false;
         break;
         break;
       }
-      if (gb.buttons.pressed(BTN_C)) {
+      if (gb.buttons.pressed(BTN_UP)){
+        gb.sound.setVolume(1);
+        gb.sound.playOK();
+      }
+      if(gb.buttons.pressed(BTN_DOWN)){
+        gb.sound.playCancel();
+        gb.sound.setVolume(0);
+      }
+      if (gb.buttons.pressed(BTN_C)){
         gb.changeGame();
       }
     }
