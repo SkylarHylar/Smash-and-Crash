@@ -33,7 +33,8 @@ int playery = 36;
 int playerflip = NOFLIP;
 int playerxv = 2;
 int playeryv = 1;
-int playergrav = 1;
+int playergrav = 0;
+boolean playerjump = true;
 int frames = 0;
 
 int meteorx = random(0,76);
@@ -64,6 +65,7 @@ void loop(){
         arrowx = 0;
         arrowy = random(20,40);
         alive = true;
+        gb.display.setFont(font3x5);
         play();
       break;
     case 1: //Load Options
@@ -81,7 +83,7 @@ void loop(){
           gb.display.print(gb.battery.level);
           gb.display.println(F("/4"));
           gb.display.println(F(""));
-          gb.display.println(F("Press \26 to return"));
+          gb.display.println(F("Press \26"));
           gb.battery.show = true;
       }
     }
