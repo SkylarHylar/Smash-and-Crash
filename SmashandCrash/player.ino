@@ -1,7 +1,7 @@
 void play(){
   while(true){
     if(gb.update()){
-      if(alive == true){
+      if((alive == true) && (pause == false)){
         frames = frames + 1;
         gb.display.println(frames);
 
@@ -11,11 +11,19 @@ void play(){
         gb.display.drawBitmap(20,28,platform2);
         
         if ((gb.buttons.repeat(BTN_LEFT,2)) && (playerx > 0)){
-          playerx = playerx - playerxv;
+          playerx = playerx - 2;
           playerflip = FLIPH;
         };
         if ((gb.buttons.repeat(BTN_RIGHT,2)) && (playerx < 76)){
-          playerx = playerx + playerxv;
+          playerx = playerx + 2;
+          playerflip = NOFLIP;
+        };
+        if ((gb.buttons.repeat(BTN_LEFT,2)) && (playerx > 0) && (gb.buttons.repeat(BTN_B,1))){
+          playerx = playerx - 4;
+          playerflip = FLIPH;
+        };
+        if ((gb.buttons.repeat(BTN_RIGHT,2)) && (playerx < 76) && (gb.buttons.repeat(BTN_B,1))){
+          playerx = playerx + 4;
           playerflip = NOFLIP;
         };
         if ((gb.buttons.repeat(BTN_A,20)) && (playerjump == true)){
@@ -23,27 +31,36 @@ void play(){
             playery = playery - 1;
             playergrav = -9;
         };
-
+        if (gb.buttons.repeat(BTN_C,20)){
+            pause = true;
+        };
+        
         //Disaster Code
 
         if (change == frames){
-          disaster = random(1,3);
+          gb.pickRandomSeed();
+          disaster = random(1,9);
           change = change + 200;
         }
 
-        if (disaster == 1){
+        if ((disaster >= 1) &&(disaster <= 3)){
           gb.display.drawBitmap(meteorx,meteory,meteor);
           meteory = meteory + 1;
+          arrowx = 0;
+          ballx = 0;
         }
 
-        if (disaster == 2){
+        if ((disaster >= 4) &&(disaster <= 6)){
           gb.display.drawBitmap(arrowx,arrowy,arrow);
-          arrowx = arrowx + 1;
+          arrowx = arrowx + 1.5;
+          meteory = 0;
+          ballx = 0;
         }
 
-        if (disaster == 3) {
-          gb.display.drawBitmap(0,watery,Water);
-          watery = random(32,34);
+        if ((disaster >= 7) &&(disaster <= 9)) {
+          gb.display.drawBitmap(ballx,bally,ball);
+          arrowx = 0;
+          meteory = 0;
         }
         
         //Platform code
@@ -65,17 +82,18 @@ void play(){
         
         //Meteor Code
         
-        if(gb.collideBitmapBitmap(playerx, playery, player, meteorx, meteory, meteor) == true){
+        if((gb.collideBitmapBitmap(playerx, playery, player, meteorx, meteory, meteor) == true) && (disaster >= 1) &&(disaster <= 3)){
           alive = false;
         };
         if((gb.collideBitmapBitmap(meteorx, meteory, meteor, 0, 44, platform) == true) || (gb.collideBitmapBitmap(meteorx, meteory, meteor, 20, 28, platform2) == true)){
+          gb.display.drawBitmap(meteorx, meteory + 4, blow);
           meteory = 0;
           meteorx = random(0,76);
         };
         
         //Arrow Code
         
-        if(gb.collideBitmapBitmap(playerx, playery, player, arrowx, arrowy, arrow) == true){
+        if((gb.collideBitmapBitmap(playerx, playery, player, arrowx, arrowy, arrow) == true) && (disaster >= 4) &&(disaster <= 6)){
           alive = false;
         };
         if((gb.collideBitmapBitmap(arrowx, arrowy, arrow, 0, 44, platform) == true) || (gb.collideBitmapBitmap(arrowx, arrowy, arrow, 20, 28, platform2) == true)){
@@ -87,13 +105,57 @@ void play(){
           arrowy = random(20,40);
         };
 
-        //Water Code
+        //Ball Code
 
-        if((gb.collideBitmapBitmap(playerx, playery, player, 0, watery, Water) == true) && (disaster == 3)){
+        if((gb.collideBitmapBitmap(playerx, playery, player, ballx, bally, ball) == true) && (disaster >= 7) &&(disaster <= 9)){
           alive = false;
         };
+        if(bally <= 0){
+          ballyv = 1.5;
+        }
+        if(bally >= 42){
+          ballyv = -1.5;
+        }
+        if((ballx <= 0) || (ballx >= 83)){
+          bally = random(0,42);
+          way = random(0,1);
+          if(way == 0){
+            ballx = 82;
+          }
+          if(way == 1){
+            ballx = 1;
+          }
+        }
+        if(way == 0){
+          ballx = ballx - 1.5;
+          bally = bally + ballyv;
+        }
+        if(way == 1){
+          ballx = ballx + 1.5;
+          bally = bally + ballyv;
+        }
         
       };
+      if((alive == true) && (pause == true)){
+        gb.display.setFont(font5x7);
+        gb.display.cursorX = 24;
+        gb.display.cursorY = 4;
+        gb.display.drawRect(0,0,84,48);
+        gb.display.println("PAUSED");
+        gb.display.cursorX = 8;
+        gb.display.println(" ");
+        gb.display.cursorX = 12;
+        gb.display.print(frames);
+        gb.display.println(" frames");
+        gb.display.cursorX = 8;
+        gb.display.println(" ");
+        gb.display.cursorX = 8;
+        gb.display.println("\26 to resume");
+        if(gb.buttons.pressed(BTN_B)) {
+          gb.display.setFont(font3x5);
+          pause = false;
+        }
+      }
       
       if(alive == false){
         gb.display.cursorX = 0;

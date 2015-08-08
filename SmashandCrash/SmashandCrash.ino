@@ -18,7 +18,8 @@ extern const byte platform[];
 extern const byte platform2[];
 extern const byte meteor[];
 extern const byte arrow[];
-extern const byte Water[];
+extern const byte ball[];
+extern const byte blow[];
 extern const byte font3x5[];
 extern const byte font5x7[];
 void setup(){
@@ -32,11 +33,12 @@ void setup(){
 int playerx = 20;
 int playery = 36;
 int playerflip = NOFLIP;
-int playerxv = 2;
 int playeryv = 1;
 int playergrav = 0;
 boolean playerjump = true;
 int frames = -1;
+
+boolean pause = false;
 
 int meteorx = random(0,76);
 int meteory = 0;
@@ -47,7 +49,10 @@ int disaster = 0;
 int arrowx = 0;
 int arrowy = random(20,40);
 
-int watery = 32;
+int ballx = 0;
+int bally = random(6,42);
+int way = random(0,1);
+int ballyv = -1.5;
 
 boolean alive = true;
 
@@ -63,17 +68,26 @@ void loop(){
         playerx = 20;
         playery = 20;
         playerflip = NOFLIP;
-        playerxv = 2;
         playeryv = 1;
         playergrav = 1;
+        
         meteory = 0;
+        meteorx = random(0,76);
+        
         change = 0;
         disaster = 0;
-        meteorx = random(0,76);
+        
         arrowx = 0;
         arrowy = random(20,40);
-        watery = 32;
+        
+        ballx = 0;
+        bally = random(6,42);
+        way = random(0,1);
+        ballyv = -1.5;
+        
         alive = true;
+        pause = false;
+        
         gb.display.setFont(font3x5);
         play();
       break;
