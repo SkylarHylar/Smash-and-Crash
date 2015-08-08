@@ -18,6 +18,7 @@ extern const byte platform[];
 extern const byte platform2[];
 extern const byte meteor[];
 extern const byte arrow[];
+extern const byte Water[];
 extern const byte font3x5[];
 extern const byte font5x7[];
 void setup(){
@@ -35,13 +36,18 @@ int playerxv = 2;
 int playeryv = 1;
 int playergrav = 0;
 boolean playerjump = true;
-int frames = 0;
+int frames = -1;
 
 int meteorx = random(0,76);
 int meteory = 0;
 
+int change = 0;
+int disaster = 0;
+
 int arrowx = 0;
 int arrowy = random(20,40);
+
+int watery = 32;
 
 boolean alive = true;
 
@@ -61,9 +67,12 @@ void loop(){
         playeryv = 1;
         playergrav = 1;
         meteory = 0;
+        change = 0;
+        disaster = 0;
         meteorx = random(0,76);
         arrowx = 0;
         arrowy = random(20,40);
+        watery = 32;
         alive = true;
         gb.display.setFont(font3x5);
         play();

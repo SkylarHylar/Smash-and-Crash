@@ -4,12 +4,7 @@ void play(){
       if(alive == true){
         frames = frames + 1;
         gb.display.println(frames);
-        gb.display.drawBitmap(meteorx,meteory,meteor);
-        meteory = meteory + 1;
-        
-        gb.display.drawBitmap(arrowx,arrowy,arrow);
-        arrowx = arrowx + 1;
-        
+
         playery = playery + playergrav;
         gb.display.drawBitmap(playerx,playery,player,NOROT,playerflip);
         gb.display.drawBitmap(0,44,platform);
@@ -28,6 +23,28 @@ void play(){
             playery = playery - 1;
             playergrav = -9;
         };
+
+        //Disaster Code
+
+        if (change == frames){
+          disaster = random(1,3);
+          change = change + 200;
+        }
+
+        if (disaster == 1){
+          gb.display.drawBitmap(meteorx,meteory,meteor);
+          meteory = meteory + 1;
+        }
+
+        if (disaster == 2){
+          gb.display.drawBitmap(arrowx,arrowy,arrow);
+          arrowx = arrowx + 1;
+        }
+
+        if (disaster == 3) {
+          gb.display.drawBitmap(0,watery,Water);
+          watery = random(32,34);
+        }
         
         //Platform code
         
@@ -69,7 +86,15 @@ void play(){
           arrowx = 0;
           arrowy = random(20,40);
         };
+
+        //Water Code
+
+        if((gb.collideBitmapBitmap(playerx, playery, player, 0, watery, Water) == true) && (disaster == 3)){
+          alive = false;
+        };
+        
       };
+      
       if(alive == false){
         gb.display.cursorX = 0;
         gb.display.cursorY = 0;
@@ -82,7 +107,7 @@ void play(){
         gb.display.println("Press \26");
         if (gb.buttons.pressed(BTN_B)){
           gb.sound.playCancel();
-          frames = 0;
+          frames = -1;
           gb.display.setFont(font5x7);
           break;
           break;
