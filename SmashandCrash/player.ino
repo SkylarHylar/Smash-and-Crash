@@ -19,15 +19,20 @@ void play(){
           playerflip = NOFLIP;
         };
         if ((gb.buttons.repeat(BTN_LEFT,2)) && (playerx > 0) && (gb.buttons.repeat(BTN_B,1))){
-          playerx = playerx - 4;
+          gb.sound.playNote(6, 1, 1);
+          gb.sound.command(1, 1, 0, 1);
+          playerx = playerx - 3;
           playerflip = FLIPH;
         };
         if ((gb.buttons.repeat(BTN_RIGHT,2)) && (playerx < 76) && (gb.buttons.repeat(BTN_B,1))){
-          playerx = playerx + 4;
+          gb.sound.playNote(6, 1, 1);
+          gb.sound.command(1, 1, 0, 1);
+          playerx = playerx + 3;
           playerflip = NOFLIP;
         };
         if ((gb.buttons.repeat(BTN_A,20)) && (playerjump == true)){
-            gb.sound.playOK();
+            gb.sound.playNote(30, 5, 0);
+            gb.sound.command(3, 3, 1, 0);
             playery = playery - 1;
             playergrav = -9;
         };
@@ -39,7 +44,7 @@ void play(){
 
         if (change == frames){
           gb.pickRandomSeed();
-          disaster = random(1,9);
+          disaster = random(1,12);
           change = change + 200;
         }
 
@@ -57,10 +62,17 @@ void play(){
           ballx = 0;
         }
 
-        if ((disaster >= 7) &&(disaster <= 9)) {
+        if ((disaster >= 7) &&(disaster <= 9)){
           gb.display.drawBitmap(ballx,bally,ball);
           arrowx = 0;
           meteory = 0;
+        }
+        if ((disaster >= 10) &&(disaster <= 12)){
+          gb.display.drawBitmap(77,10,bhole);
+          playerx = playerx + 2;
+          arrowx = 0;
+          meteory = 0;
+          ballx = 0;
         }
         
         //Platform code
@@ -83,6 +95,9 @@ void play(){
         //Meteor Code
         
         if((gb.collideBitmapBitmap(playerx, playery, player, meteorx, meteory, meteor) == true) && (disaster >= 1) &&(disaster <= 3)){
+          gb.sound.playNote(1, 28, 1);
+          gb.sound.command(1, 1, 0, 1);
+          gb.sound.command(2, 7, -2, 1);
           alive = false;
         };
         if((gb.collideBitmapBitmap(meteorx, meteory, meteor, 0, 44, platform) == true) || (gb.collideBitmapBitmap(meteorx, meteory, meteor, 20, 28, platform2) == true)){
@@ -94,6 +109,9 @@ void play(){
         //Arrow Code
         
         if((gb.collideBitmapBitmap(playerx, playery, player, arrowx, arrowy, arrow) == true) && (disaster >= 4) &&(disaster <= 6)){
+          gb.sound.playNote(1, 28, 1);
+          gb.sound.command(1, 1, 0, 1);
+          gb.sound.command(2, 7, -2, 1);
           alive = false;
         };
         if((gb.collideBitmapBitmap(arrowx, arrowy, arrow, 0, 44, platform) == true) || (gb.collideBitmapBitmap(arrowx, arrowy, arrow, 20, 28, platform2) == true)){
@@ -108,6 +126,9 @@ void play(){
         //Ball Code
 
         if((gb.collideBitmapBitmap(playerx, playery, player, ballx, bally, ball) == true) && (disaster >= 7) &&(disaster <= 9)){
+          gb.sound.playNote(1, 28, 1);
+          gb.sound.command(1, 1, 0, 1);
+          gb.sound.command(2, 7, -2, 1);
           alive = false;
         };
         if(bally <= 0){
@@ -134,6 +155,15 @@ void play(){
           ballx = ballx + 1.5;
           bally = bally + ballyv;
         }
+
+        //Black Hole Code (Some is in Disaster code)
+        if((gb.collideBitmapBitmap(playerx, playery, player, 77, 10, bhole) == true) && (disaster >= 10) &&(disaster <= 12)){
+          gb.sound.playNote(1, 28, 1);
+          gb.sound.command(1, 1, 0, 1);
+          gb.sound.command(2, 7, -2, 1);
+          alive = false;
+        };
+        
         
       };
       if((alive == true) && (pause == true)){
@@ -152,25 +182,29 @@ void play(){
         gb.display.cursorX = 8;
         gb.display.println("\26 to resume");
         if(gb.buttons.pressed(BTN_B)) {
-          gb.display.setFont(font3x5);
           pause = false;
         }
       }
       
       if(alive == false){
-        gb.display.cursorX = 0;
-        gb.display.cursorY = 0;
+        gb.display.setFont(font5x7);
+        gb.display.drawRect(0,0,84,48);
+        gb.display.cursorY = 2;
+        gb.display.cursorX = 16;
         gb.display.println("You died!");
+        gb.display.cursorX = 8;
         gb.display.println("");
+        gb.display.cursorX = 28;
         gb.display.println("Time:");
+        gb.display.cursorX = 8;
         gb.display.print(frames);
         gb.display.println(" frames.");
-        gb.display.println("");
+        gb.display.cursorX = 20;
+        gb.display.cursorY = 38;
         gb.display.println("Press \26");
         if (gb.buttons.pressed(BTN_B)){
           gb.sound.playCancel();
           frames = -1;
-          gb.display.setFont(font5x7);
           break;
           break;
           break;

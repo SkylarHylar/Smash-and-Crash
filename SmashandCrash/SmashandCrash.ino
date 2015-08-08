@@ -20,6 +20,7 @@ extern const byte meteor[];
 extern const byte arrow[];
 extern const byte ball[];
 extern const byte blow[];
+extern const byte bhole[];
 extern const byte font3x5[];
 extern const byte font5x7[];
 void setup(){
@@ -28,6 +29,7 @@ void setup(){
   titlescreen();
   gb.battery.show = false;
   gb.display.persistence = false;
+  gb.setFrameRate(30);
 }
 
 int playerx = 20;
