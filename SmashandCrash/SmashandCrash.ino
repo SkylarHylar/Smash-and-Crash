@@ -3,13 +3,13 @@
 Gamebuino gb;
 #define MENULENGTH 4
 const char strSurvival[] PROGMEM = "Survival";
-const char strOptions[] PROGMEM = "Options";
-const char strMulti[] PROGMEM = "Multiplayer";
+const char strStatus[] PROGMEM = "Status";
+const char strCtrl[] PROGMEM = "Controls";
 const char strTitle[] PROGMEM = "Change Game";
 const char* const menu[MENULENGTH] PROGMEM = {
   strSurvival,
-  strOptions,
-  strMulti,
+  strStatus,
+  strCtrl,
   strTitle,
 };
 extern const byte logo[];
@@ -36,7 +36,10 @@ int playerflip = NOFLIP;
 int playeryv = 1;
 int playergrav = 0;
 boolean playerjump = true;
+
 int frames = -1;
+int CPU = gb.getCpuLoad();
+int RAM = gb.getFreeRam();
 
 boolean pause = false;
 
@@ -91,7 +94,7 @@ void loop(){
         gb.display.setFont(font3x5);
         play();
       break;
-    case 1: //Load Options
+    case 1: //Load Status
       while (1) {
         if (gb.update()) {
           if (gb.buttons.pressed(BTN_B)) {
@@ -101,20 +104,39 @@ void loop(){
           }
           gb.display.cursorX = 0;
           gb.display.cursorY = 0;
-  
-          gb.display.print(F("Battery:"));
-          gb.display.print(gb.battery.level);
-          gb.display.println(F("/4"));
-          gb.display.println(F(""));
-          gb.display.println(F("Press \26"));
+          CPU = gb.getCpuLoad();
+          RAM = gb.getFreeRam();
+          gb.display.print("CPU:");
+          gb.display.print(CPU);
+          gb.display.println("%");
+          gb.display.println("");
+          gb.display.print("Free RAM: ");
+          gb.display.println(RAM);
+          gb.display.println("");
+          gb.display.println("Press \26");
           gb.battery.show = true;
       }
     }
       break;
-    case 2: //Load Multiplayer
-      gb.display.print(F(" Connecting..."));
-        delay(100);
-      break;
+    case 2: //Controls
+      while (1) {
+        if (gb.update()) {
+          if (gb.buttons.pressed(BTN_B)) {
+            gb.sound.playCancel();
+            break;
+          }
+          gb.display.cursorX = 0;
+          gb.display.cursorY = 0;
+  
+          gb.display.println("\25 Jump");
+          gb.display.println("");
+          gb.display.println("\26 Run");
+          gb.display.println("");
+          gb.display.println("\27 Pause");
+          gb.display.println("Press \26");
+      }
+    }
+    break;
     case 3: //Back to the Loader
       gb.changeGame();
       break;
