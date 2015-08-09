@@ -21,6 +21,7 @@ extern const byte arrow[];
 extern const byte ball[];
 extern const byte blow[];
 extern const byte bhole[];
+extern const byte point[];
 extern const byte font3x5[];
 extern const byte font5x7[];
 void setup(){
@@ -30,9 +31,9 @@ void setup(){
   gb.battery.show = false;
   gb.display.persistence = false;
   gb.setFrameRate(30);
-}
+};
 
-int playerx = 20;
+int playerx = 38;
 int playery = 36;
 int playerflip = NOFLIP;
 int playeryv = 1;
@@ -45,6 +46,8 @@ int RAM = gb.getFreeRam();
 
 boolean pause = false;
 
+int mapscroll = 0;
+
 int meteorx = random(0,76);
 int meteory = 0;
 
@@ -52,7 +55,7 @@ int change = 0;
 int disaster = 0;
 
 int arrowx = 0;
-int arrowy = random(20,40);
+int arrowy = random(0,34);
 
 int ballx = 0;
 int bally = random(6,42);
@@ -70,8 +73,8 @@ void loop(){
     case 0: //Load Survival
       gb.display.print(F("    Loading...."));
         gb.pickRandomSeed();
-        playerx = 20;
-        playery = 20;
+        playerx = 38;
+        playery = 36;
         playerflip = NOFLIP;
         playeryv = 1;
         playergrav = 1;
@@ -83,7 +86,7 @@ void loop(){
         disaster = 0;
         
         arrowx = 0;
-        arrowy = random(20,40);
+        arrowy = random(0,34);
         
         ballx = 0;
         bally = random(6,42);
@@ -92,7 +95,7 @@ void loop(){
         
         alive = true;
         pause = false;
-        
+        maps();
         gb.display.setFont(font3x5);
         play();
       break;
@@ -117,8 +120,8 @@ void loop(){
           gb.display.println("");
           gb.display.println("Press \26");
           gb.battery.show = true;
-      }
-    }
+      };
+    };
       break;
     case 2: //Controls
       while (1) {
@@ -136,16 +139,16 @@ void loop(){
           gb.display.println("");
           gb.display.println("\27 Pause");
           gb.display.println("Press \26");
-      }
-    }
+      };
+    };
     break;
     case 3: //Back to the Loader
       gb.changeGame();
       break;
     default:
       break;
-  }
-}
+  };
+};
 
 void titlescreen(){
   while(1){
@@ -167,7 +170,7 @@ void titlescreen(){
       }
       if (gb.buttons.pressed(BTN_C)){
         gb.changeGame();
-      }
-    }
-  }
-}
+      };
+    };
+  };
+};
