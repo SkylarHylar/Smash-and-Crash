@@ -12,7 +12,7 @@ const char* const menu[MENULENGTH] PROGMEM = {
   strCtrl,
   strTitle,
 };
-extern const byte logo[];
+extern const byte Title[];
 extern const byte player[];
 extern const byte platform[];
 extern const byte platform2[];
@@ -27,7 +27,7 @@ extern const byte font5x7[];
 void setup(){
   gb.begin();
   gb.display.setFont(font5x7);
-  titlescreen();
+  gb.titleScreen(F(" "), Title);
   gb.battery.show = false;
   gb.display.persistence = false;
   gb.setFrameRate(30);
@@ -68,7 +68,7 @@ void loop(){
   gb.battery.show = false;
   switch(gb.menu(menu, MENULENGTH)){
     case -1: //nothing selected
-      titlescreen();
+      gb.titleScreen(Title);
       break;
     case 0: //Load Survival
       gb.display.print(F("    Loading...."));
@@ -107,17 +107,22 @@ void loop(){
             gb.battery.show = false;
             break;
           }
-          gb.display.cursorX = 0;
-          gb.display.cursorY = 0;
+          gb.display.drawRect(0,0,84,48);
+          gb.display.cursorX = 2;
+          gb.display.cursorY = 2;
           CPU = gb.getCpuLoad();
           RAM = gb.getFreeRam();
           gb.display.print("CPU:");
           gb.display.print(CPU);
           gb.display.println("%");
+          gb.display.cursorX = 2;
           gb.display.println("");
+          gb.display.cursorX = 2;
           gb.display.print("Free RAM: ");
           gb.display.println(RAM);
+          gb.display.cursorX = 2;
           gb.display.println("");
+          gb.display.cursorX = 2;
           gb.display.println("Press \26");
           gb.battery.show = true;
       };
@@ -130,15 +135,19 @@ void loop(){
             gb.sound.playCancel();
             break;
           }
-          gb.display.cursorX = 0;
-          gb.display.cursorY = 0;
+          gb.display.drawRect(0,0,84,48);
+          gb.display.cursorX = 2;
+          gb.display.cursorY = 2;
   
           gb.display.println("\25 Jump");
+          gb.display.cursorX = 2;
           gb.display.println("");
+          gb.display.cursorX = 2;
           gb.display.println("\26 Run");
+          gb.display.cursorX = 2;
           gb.display.println("");
+          gb.display.cursorX = 2;
           gb.display.println("\27 Pause");
-          gb.display.println("Press \26");
       };
     };
     break;
@@ -150,27 +159,3 @@ void loop(){
   };
 };
 
-void titlescreen(){
-  while(1){
-    if (gb.update()){
-      gb.display.drawBitmap(0, 0, logo);
-      if (gb.buttons.pressed(BTN_A)){
-        gb.sound.playOK();
-        gb.battery.show = false;
-        break;
-        break;
-      }
-      if (gb.buttons.pressed(BTN_UP)){
-        gb.sound.setVolume(1);
-        gb.sound.playOK();
-      }
-      if(gb.buttons.pressed(BTN_DOWN)){
-        gb.sound.playCancel();
-        gb.sound.setVolume(0);
-      }
-      if (gb.buttons.pressed(BTN_C)){
-        gb.changeGame();
-      };
-    };
-  };
-};

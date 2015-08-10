@@ -1,9 +1,5 @@
 # Smash-and-Crash
-Dodge meteors! Jump around! See your highscore!
+Dodge disasters created by none other than Nature!
 
-## Instructions
-At the title screen, press Up to unmute, and Down to mute. A goes to the menu, and C changes the game.
-
-In the menu, press A to Accept and B to decline.
-
-In the game, pressing Left and Right moves the character, Down crouches, and A makes the character jump.
+## Installation
+The .HEX and .INF files are all that you need for playing the game, but .elf is for gbsim, and the source code is available.

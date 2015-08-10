@@ -187,7 +187,7 @@ void play(){
             playerjump = true;
           }
           else if(gb.collideBitmapBitmap(playerx,playery,player,60,28,platform2) == true){
-            playery = 54;
+            playery = 22;
             playergrav = 0;
             playerjump = true;
           }
