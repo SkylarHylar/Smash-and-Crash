@@ -34,7 +34,7 @@ void play(){
             gb.sound.playNote(30, 5, 0);
             gb.sound.command(3, 3, 1, 0);
             playery = playery - 1;
-            playergrav = -9;
+            playergrav = -7;
         };
         if (gb.buttons.repeat(BTN_C,20)){
             pause = true;
