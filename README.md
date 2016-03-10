@@ -2,4 +2,4 @@
 Dodge disasters created by none other than Nature!
 
 ## Installation
-The .HEX and .INF files are all that you need for playing the game, but .elf is for gbsim, and the source code is available.
+The .HEX file is all that you need for playing the game, but .elf is for emulators, and the source code is available.
