@@ -1,17 +1,7 @@
-#include <SPI.h>
-#include <Gamebuino.h>
-Gamebuino gb;
-#define MENULENGTH 4
-const char strSurvival[] PROGMEM = "Survival";
-const char strStatus[] PROGMEM = "Status";
-const char strCtrl[] PROGMEM = "Controls";
-const char strTitle[] PROGMEM = "Change Game";
-const char* const menu[MENULENGTH] PROGMEM = {
-  strSurvival,
-  strStatus,
-  strCtrl,
-  strTitle,
-};
+#include <ab_logo.h>
+#include <Arduboy.h>
+// #include <Maps.ino> Not Yet!
+Arduboy ad;
 extern const byte Title[];
 extern const byte player[];
 extern const byte platform[];
@@ -25,137 +15,61 @@ extern const byte point[];
 extern const byte font3x5[];
 extern const byte font5x7[];
 void setup(){
-  gb.begin();
-  gb.display.setFont(font5x7);
-  gb.titleScreen(F(" "), Title);
-  gb.battery.show = false;
-  gb.display.persistence = false;
-  gb.setFrameRate(30);
+  ad.begin();
+  ad.setFrameRate(30);
 };
 
 int playerx = 38;
 int playery = 36;
-int playerflip = NOFLIP;
 int playeryv = 1;
 int playergrav = 0;
 boolean playerjump = true;
 
 int frames = -1;
-int CPU = gb.getCpuLoad();
-int RAM = gb.getFreeRam();
-
-boolean pause = false;
 
 int mapscroll = 0;
 
-int meteorx = random(0,76);
+int meteorx = random(0,120);
 int meteory = 0;
 
 int change = 0;
 int disaster = 0;
 
 int arrowx = 0;
-int arrowy = random(0,34);
+int arrowy = random(0,50);
 
 int ballx = 0;
-int bally = random(6,42);
+int bally = random(6,58);
 int way = random(0,1);
 int ballyv = -1.5;
 
 boolean alive = true;
 
 void loop(){
-  gb.battery.show = false;
-  switch(gb.menu(menu, MENULENGTH)){
-    case -1: //nothing selected
-      gb.titleScreen(Title);
-      break;
-    case 0: //Load Survival
-      gb.display.print(F("    Loading...."));
-        gb.pickRandomSeed();
+  ad.clear();
+  ad.print("Press A!")
+  if(ad.pressed(A_BUTTON)) {
         playerx = 38;
         playery = 36;
-        playerflip = NOFLIP;
         playeryv = 1;
         playergrav = 1;
         
         meteory = 0;
-        meteorx = random(0,76);
+        meteorx = random(0,120);
         
         change = 0;
         disaster = 0;
         
         arrowx = 0;
-        arrowy = random(0,34);
+        arrowy = random(0,50);
         
         ballx = 0;
-        bally = random(6,42);
+        bally = random(6,58);
         way = random(0,1);
         ballyv = -1.5;
         
         alive = true;
-        pause = false;
-        maps();
-        gb.display.setFont(font3x5);
         play();
-      break;
-    case 1: //Load Status
-      while (1) {
-        if (gb.update()) {
-          if (gb.buttons.pressed(BTN_B)) {
-            gb.sound.playCancel();
-            gb.battery.show = false;
-            break;
-          }
-          gb.display.drawRect(0,0,84,48);
-          gb.display.cursorX = 2;
-          gb.display.cursorY = 2;
-          CPU = gb.getCpuLoad();
-          RAM = gb.getFreeRam();
-          gb.display.print("CPU:");
-          gb.display.print(CPU);
-          gb.display.println("%");
-          gb.display.cursorX = 2;
-          gb.display.println("");
-          gb.display.cursorX = 2;
-          gb.display.print("Free RAM: ");
-          gb.display.println(RAM);
-          gb.display.cursorX = 2;
-          gb.display.println("");
-          gb.display.cursorX = 2;
-          gb.display.println("Press \26");
-          gb.battery.show = true;
-      };
-    };
-      break;
-    case 2: //Controls
-      while (1) {
-        if (gb.update()) {
-          if (gb.buttons.pressed(BTN_B)) {
-            gb.sound.playCancel();
-            break;
-          }
-          gb.display.drawRect(0,0,84,48);
-          gb.display.cursorX = 2;
-          gb.display.cursorY = 2;
-  
-          gb.display.println("\25 Jump");
-          gb.display.cursorX = 2;
-          gb.display.println("");
-          gb.display.cursorX = 2;
-          gb.display.println("\26 Run");
-          gb.display.cursorX = 2;
-          gb.display.println("");
-          gb.display.cursorX = 2;
-          gb.display.println("\27 Pause");
-      };
-    };
-    break;
-    case 3: //Back to the Loader
-      gb.changeGame();
-      break;
-    default:
-      break;
   };
+  ad.display();
 };
-
